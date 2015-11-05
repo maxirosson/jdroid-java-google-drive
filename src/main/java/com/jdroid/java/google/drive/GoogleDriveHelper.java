@@ -69,13 +69,12 @@ public class GoogleDriveHelper {
 		} catch (GeneralSecurityException e) {
 			throw new UnexpectedException(e);
 		}
-
 		dataStoreFactory = new FileDataStoreFactory(userCredentials);
 
 		this.applicationName = applicationName;
-		drive = getDriveService();
 		this.scopes = scopes;
 		this.clientJsonFilePath = clientJsonFilePath;
+		drive = getDriveService();
 	}
 
 	/**
