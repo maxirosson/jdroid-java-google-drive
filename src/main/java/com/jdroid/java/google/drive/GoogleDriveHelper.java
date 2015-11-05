@@ -61,7 +61,7 @@ public class GoogleDriveHelper {
 	private Drive drive;
 	private String clientJsonFilePath;
 
-	public GoogleDriveHelper(String applicationName, List<String> scopes, java.io.File userCredentials, String clientJsonFilePath) throws IOException {
+	public GoogleDriveHelper(List<String> scopes, java.io.File userCredentials, String clientJsonFilePath) throws IOException {
 
 		jsonFactory = JacksonFactory.getDefaultInstance();
 		try {
@@ -71,7 +71,6 @@ public class GoogleDriveHelper {
 		}
 		dataStoreFactory = new FileDataStoreFactory(userCredentials);
 
-		this.applicationName = applicationName;
 		this.scopes = scopes;
 		this.clientJsonFilePath = clientJsonFilePath;
 		drive = getDriveService();
@@ -203,5 +202,9 @@ public class GoogleDriveHelper {
 			throw new IllegalArgumentException("Invalid Google Drive path.");
 		}
 		return result;
+	}
+
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
 	}
 }
