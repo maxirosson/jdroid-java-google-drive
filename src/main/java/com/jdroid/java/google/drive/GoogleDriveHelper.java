@@ -59,9 +59,9 @@ public class GoogleDriveHelper {
 
 	private String applicationName;
 	private Drive drive;
-	private String clientJsonFilePath;
+	private String userCredentialsDirPath;
 
-	public GoogleDriveHelper(List<String> scopes, java.io.File userCredentials, String clientJsonFilePath) throws IOException {
+	public GoogleDriveHelper(List<String> scopes, String userCredentialsDirPath) throws IOException {
 
 		jsonFactory = JacksonFactory.getDefaultInstance();
 		try {
@@ -69,10 +69,10 @@ public class GoogleDriveHelper {
 		} catch (GeneralSecurityException e) {
 			throw new UnexpectedException(e);
 		}
-		dataStoreFactory = new FileDataStoreFactory(userCredentials);
+		dataStoreFactory = new FileDataStoreFactory(new java.io.File(userCredentialsDirPath));
 
 		this.scopes = scopes;
-		this.clientJsonFilePath = clientJsonFilePath;
+		this.userCredentialsDirPath = userCredentialsDirPath;
 		drive = getDriveService();
 	}
 
@@ -97,7 +97,7 @@ public class GoogleDriveHelper {
 	 */
 	private Credential authorize() throws IOException {
 		// Load client secrets.
-		InputStream in = new FileInputStream(clientJsonFilePath);
+		InputStream in = new FileInputStream(userCredentialsDirPath + "/client_secret.json");
 		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
 
 		// Build flow and trigger user authorization request.
