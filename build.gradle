@@ -1,0 +1,116 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'com.google.api-client:google-api-client:1.20.0'
+	compile 'com.google.oauth-client:google-oauth-client-jetty:1.20.0'
+	compile 'com.google.apis:google-api-services-drive:v2-rev170-1.20.0'
+	compile 'com.jdroidframework:jdroid-java:0.9.0'
+}
+
+version = '0.9.0-SNAPSHOT'
+group = 'com.jdroidframework'
+ext.projectName = 'jdroid-java-google-drive'
+ext.description = 'Java Connector for Google Drive API'
+
+ext.packaging = jar
+
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives javadocJar, sourcesJar
+}
+
+afterEvaluate {
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+
+				beforeDeployment { MavenDeployment deployment ->
+					signing.signPom(deployment)
+				}
+
+				def localUpload = getProp('LOCAL_UPLOAD')
+				if (localUpload != null && localUpload == 'true') {
+					repository(url: uri(getProp('LOCAL_MAVEN_REPO')))
+				} else {
+					repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+						authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+					}
+					snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+						authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+					}
+				}
+
+				pom.project {
+					name project.ext.projectName
+					description project.description
+					packaging project.packaging
+					url 'http://www.jdroidframework.com'
+					inceptionYear '2011'
+					organization {
+						name 'Jdroid'
+						url 'http://www.jdroidframework.com'
+					}
+					licenses {
+						license {
+							name 'The Apache License, Version 2.0'
+							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+							distribution 'repo'
+						}
+					}
+					developers {
+						developer {
+							name 'Maxi Rosson'
+							email 'jdroidsoft@gmail.com'
+							roles {
+								role 'architect'
+								role 'developer'
+							}
+						}
+					}
+					scm {
+						connection 'scm:git:git@github.com:maxirosson/jdroid-java-google-drive.git'
+						developerConnection 'scm:git:git@github.com:maxirosson/jdroid-java-google-drive.git'
+						url 'git@github.com:maxirosson/jdroid-java-google-drive.git'
+					}
+					issueManagement {
+						system 'GitHub'
+						url 'https://github.com/maxirosson/jdroid-java-google-drive/issues'
+					}
+				}
+			}
+		}
+	}
+
+}
+
+signing {
+	required { gradle.taskGraph.hasTask("uploadArchives") }
+	sign configurations.archives
+}
+
+def getRepositoryUsername() {
+	return getProp('NEXUS_USERNAME')
+}
+
+def getRepositoryPassword() {
+	getProp('NEXUS_PASSWORD')
+}
+
+public def getProp(String propertyName) {
+	return project.hasProperty(propertyName) ? project.ext.get(propertyName) : System.getenv(propertyName)
+}
