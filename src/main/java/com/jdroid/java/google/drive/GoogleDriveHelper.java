@@ -31,6 +31,8 @@ import java.util.List;
 
 public class GoogleDriveHelper {
 
+	public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
+
 	private FileDataStoreFactory dataStoreFactory;
 	private JsonFactory jsonFactory;
 	private HttpTransport httpTransport;
@@ -109,6 +111,30 @@ public class GoogleDriveHelper {
 		return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 	}
 
+	public void createFolders(List<String> folders) throws IOException {
+		String parentId = "root";
+		for (String folderName : folders) {
+			File folder = createFolder(folderName, parentId);
+			parentId = folder.getId();
+		}
+	}
+
+	public File createFolder(String folderName, String parentId) throws IOException {
+		File folder = locateFile(folderName, FOLDER_MIME_TYPE, parentId);
+		if (folder == null) {
+			File metaData = new File();
+			metaData.setTitle(folderName);
+			metaData.setMimeType(FOLDER_MIME_TYPE);
+
+			if (parentId != null) {
+				metaData.setParents(Arrays.asList(new ParentReference().setId(parentId)));
+			}
+
+			folder = drive.files().insert(metaData).execute();
+		}
+		return folder;
+	}
+
 	public void uploadFile(String mimeType, String sourcePath, List<String> targetPaths) throws IOException {
 		File parent = locateParent(targetPaths);
 		uploadFile(mimeType, sourcePath, parent);
@@ -117,7 +143,7 @@ public class GoogleDriveHelper {
 	public void uploadFile(String mimeType, String sourcePath, File parent) throws IOException {
 
 		java.io.File contentFile = new java.io.File(sourcePath);
-		File fileToRemove = locateFile(contentFile.getName(), mimeType, parent);
+		File fileToRemove = locateFile(contentFile.getName(), mimeType, parent.getId());
 		if (fileToRemove != null) {
 			drive.files().delete(fileToRemove.getId()).execute();
 		}
@@ -157,14 +183,14 @@ public class GoogleDriveHelper {
 		return result;
 	}
 
-	public File locateFile(String title, String mimeType, File parent) throws IOException {
+	public File locateFile(String title, String mimeType, String parentId) throws IOException {
 		StringBuilder query = new StringBuilder();
 		query.append("(title='");
 		query.append(title);
 		query.append("') and (mimeType = '");
 		query.append(mimeType);
 		query.append("') and (not trashed) and ('");
-		query.append(parent.getId());
+		query.append(parentId);
 		query.append("' in parents)");
 
 		FileList fileList = drive.files().list().setQ(query.toString()).execute();
