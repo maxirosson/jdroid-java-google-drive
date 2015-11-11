@@ -13,7 +13,7 @@ dependencies {
 	compile 'com.jdroidframework:jdroid-java:0.9.0'
 }
 
-version = '0.9.0-SNAPSHOT'
+version = '0.9.0'
 group = 'com.jdroidframework'
 ext.projectName = 'jdroid-java-google-drive'
 ext.description = 'Java Connector for Google Drive API'
