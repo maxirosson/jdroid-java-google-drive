@@ -13,7 +13,16 @@ dependencies {
 	compile 'com.jdroidframework:jdroid-java:0.9.0'
 }
 
-version = '0.9.0'
+ext.VERSION_MAJOR = 0
+ext.VERSION_MINOR = 9
+ext.VERSION_PATCH = 1
+ext.VERSION_CLASSIFIER = isSnapshot ? "SNAPSHOT" : null
+
+project.version = "${ext.VERSION_MAJOR}.${ext.VERSION_MINOR}.${ext.VERSION_PATCH}"
+if (ext.VERSION_CLASSIFIER != null && !ext.VERSION_CLASSIFIER.isEmpty()) {
+	project.version = project.version + "-" + ext.VERSION_CLASSIFIER
+}
+
 group = 'com.jdroidframework'
 ext.projectName = 'jdroid-java-google-drive'
 ext.description = 'Java Connector for Google Drive API'
@@ -75,7 +84,7 @@ afterEvaluate {
 					developers {
 						developer {
 							name 'Maxi Rosson'
-							email 'jdroidsoft@gmail.com'
+							email 'jdroidframework@gmail.com'
 							roles {
 								role 'architect'
 								role 'developer'
