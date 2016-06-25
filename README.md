@@ -1,5 +1,4 @@
-# Java Google Drive
-Java Connector for Google Drive API
+# Jdroid Java Connector for Google Drive API
 
 ## Setup 
 
