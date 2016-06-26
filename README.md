@@ -9,7 +9,7 @@ Add the following configuration to your `build.gradle`:
     }
   
     dependencies {
-      classpath 'com.jdroidframework:jdroid-java-google-drive:0.9.0'
+      classpath 'com.jdroidframework:jdroid-java-google-drive:0.9.1'
     }
     
 ## Donations
