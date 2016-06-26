@@ -11,7 +11,7 @@ Boolean isSnapshot = getBooleanProp('SNAPSHOT', true)
 
 ext.VERSION_MAJOR = 0
 ext.VERSION_MINOR = 9
-ext.VERSION_PATCH = 1
+ext.VERSION_PATCH = 2
 ext.VERSION_CLASSIFIER = isSnapshot ? "SNAPSHOT" : null
 
 project.version = "${ext.VERSION_MAJOR}.${ext.VERSION_MINOR}.${ext.VERSION_PATCH}"
