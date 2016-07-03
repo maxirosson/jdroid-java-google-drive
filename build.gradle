@@ -1,33 +1,29 @@
-import com.sun.corba.se.impl.util.RepositoryId
-
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
-
-ext.projectName = 'jdroid-java-google-drive'
-description = 'Java Connector for Google Drive API'
-group = 'com.jdroidframework'
-ext.packaging = jar
-
-Boolean isSnapshot = getBooleanProp('SNAPSHOT', true)
-
 ext.VERSION_MAJOR = 0
 ext.VERSION_MINOR = 9
 ext.VERSION_PATCH = 2
-ext.VERSION_CLASSIFIER = isSnapshot ? "SNAPSHOT" : null
 
-project.version = "${ext.VERSION_MAJOR}.${ext.VERSION_MINOR}.${ext.VERSION_PATCH}"
-if (ext.VERSION_CLASSIFIER != null && !ext.VERSION_CLASSIFIER.isEmpty()) {
-	project.version = project.version + "-" + ext.VERSION_CLASSIFIER
-}
+ext.JDROID_GITHUB_REPOSITORY_OWNER = 'maxirosson'
+ext.JDROID_GITHUB_REPOSITORY_NAME = 'jdroid-java-google-drive'
+
+apply plugin: 'com.jdroid.java.library'
+apply plugin: 'com.jdroid.component.builder'
+
+description = 'Java Connector for Google Drive API'
 
 buildscript {
 	repositories {
 		mavenCentral()
 		jcenter()
+		String localMavenRepo = project.hasProperty('LOCAL_MAVEN_REPO') ? project.ext.get('LOCAL_MAVEN_REPO') : System.getenv('LOCAL_MAVEN_REPO')
+		if (localMavenRepo != null) {
+			maven {
+				url localMavenRepo
+			}
+		}
 	}
 	dependencies {
-		classpath 'com.jdroidframework:jdroid-java-github-connector:0.9.0'
+		classpath 'com.jdroidframework:jdroid-gradle-plugin:0.9.6-SNAPSHOT'
+		classpath 'com.jdroidframework:jdroid-internal:0.1.0-SNAPSHOT'
 	}
 }
 
@@ -40,193 +36,4 @@ dependencies {
 	compile 'com.google.oauth-client:google-oauth-client-jetty:1.20.0'
 	compile 'com.google.apis:google-api-services-drive:v2-rev170-1.20.0'
 	compile 'com.jdroidframework:jdroid-java:0.9.0'
-}
-
-task javadocJar(type: Jar) {
-	classifier = 'javadoc'
-	from javadoc
-}
-
-task sourcesJar(type: Jar) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
-}
-
-artifacts {
-	archives javadocJar, sourcesJar
-}
-
-Boolean localUpload = getBooleanProp('LOCAL_UPLOAD', true)
-def localMavenRepo = getProp('LOCAL_MAVEN_REPO')
-
-if (localUpload && localMavenRepo == null) {
-	project.logger.warn("LOCAL_MAVEN_REPO property is not defined. Skipping uploadArchives configuration")
-} else {
-	afterEvaluate {
-		uploadArchives {
-			repositories {
-				mavenDeployer {
-
-					beforeDeployment { MavenDeployment deployment ->
-						signing.signPom(deployment)
-					}
-
-					if (localUpload) {
-						repository(url: project.uri(localMavenRepo))
-					} else {
-						repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-							authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-						}
-						snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-							authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-						}
-					}
-
-					pom.project {
-						name project.ext.projectName
-						description project.description
-						packaging project.packaging
-						url 'http://www.jdroidframework.com'
-						inceptionYear '2011'
-						organization {
-							name 'Jdroid'
-							url 'http://www.jdroidframework.com'
-						}
-						licenses {
-							license {
-								name 'The Apache License, Version 2.0'
-								url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-								distribution 'repo'
-							}
-						}
-						developers {
-							developer {
-								name 'Maxi Rosson'
-								email 'jdroidframework@gmail.com'
-								roles {
-									role 'architect'
-									role 'developer'
-								}
-							}
-						}
-						scm {
-							connection 'scm:git:git@github.com:maxirosson/jdroid-java-google-drive.git'
-							developerConnection 'scm:git:git@github.com:maxirosson/jdroid-java-google-drive.git'
-							url 'git@github.com:maxirosson/jdroid-java-google-drive.git'
-						}
-						issueManagement {
-							system 'GitHub'
-							url 'https://github.com/maxirosson/jdroid-java-google-drive/issues'
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-if (getBooleanProp('SIGNING_ENABLED', true)) {
-	signing {
-		required { !isSnapshot && gradle.taskGraph.hasTask("uploadArchives") }
-		sign configurations.archives
-	}
-}
-
-def getRepositoryUsername() {
-	return getProp('JDROID_NEXUS_USERNAME')
-}
-
-def getRepositoryPassword() {
-	return getProp('JDROID_NEXUS_PASSWORD')
-}
-
-public def getProp(String propertyName) {
-	return project.hasProperty(propertyName) ? project.ext.get(propertyName) : System.getenv(propertyName)
-}
-
-public Boolean getBooleanProp(String propertyName, Boolean defaultValue) {
-	def value = getProp(propertyName)
-	if (value == null) {
-		return defaultValue
-	} else if (value == 'true') {
-		return true
-	} else if (value == 'false') {
-		return false
-	} else {
-		throw new GradleException('Invalid Boolean value: ' + value)
-	}
-}
-
-task printVersion << {
-	println version
-}
-
-import com.jdroid.github.IRepositoryIdProvider;
-import com.jdroid.github.Milestone;
-import com.jdroid.github.Release;
-import com.jdroid.github.RepositoryId;
-import com.jdroid.github.client.GitHubClient;
-import com.jdroid.github.service.MilestoneService;
-import com.jdroid.github.service.ReleaseService;
-
-task closeGitHubMilestone << {
-
-	GitHubClient client = new com.jdroid.github.client.GitHubClient();
-	client.setSerializeNulls(false);
-	client.setOAuth2Token(getProp('GITHUB_OATH_TOKEN'));
-
-	IRepositoryIdProvider repositoryIdProvider = RepositoryId.create(getProp('REPOSITORY_OWNER'), getProp('REPOSITORY_NAME'));
-
-	closeMilestone(client, repositoryIdProvider, "v${version}");
-}
-
-public void closeMilestone(GitHubClient client, IRepositoryIdProvider repositoryIdProvider, String milestoneTitle) throws IOException {
-
-	MilestoneService milestoneService = new MilestoneService(client);
-	for (Milestone each : milestoneService.getMilestones(repositoryIdProvider, "open")) {
-		if (each.getTitle().equals(milestoneTitle)) {
-
-			Milestone newMilestone = new Milestone();
-			newMilestone.setNumber(each.getNumber());
-			newMilestone.setTitle(each.getTitle());
-			newMilestone.setDescription(each.getDescription());
-			newMilestone.setDueOn(new Date());
-			newMilestone.setState("closed");
-			milestoneService.editMilestone(repositoryIdProvider, newMilestone);
-			break;
-		}
-	}
-}
-
-task createGitHubRelease << {
-	GitHubClient client = new GitHubClient();
-	client.setSerializeNulls(false);
-	client.setOAuth2Token(getProp('GITHUB_OATH_TOKEN'));
-
-	IRepositoryIdProvider repositoryIdProvider = RepositoryId.create(getProp('REPOSITORY_OWNER'), getProp('REPOSITORY_NAME'));
-
-	def releaseNotesFile = project.file("./etc/releaseNotes.txt")
-
-	createRelease(client, repositoryIdProvider, "v${version}", releaseNotesFile.getText());
-}
-
-public void createRelease(GitHubClient client, IRepositoryIdProvider repositoryIdProvider, String name, String body) throws IOException {
-
-	Release release = new Release();
-	release.setBody(body);
-	release.setDraft(false);
-	release.setName(name);
-	release.setTagName(name);
-	release.setPrerelease(false);
-	release.setTargetCommitish("production");
-
-	ReleaseService releaseService = new ReleaseService(client);
-	releaseService.createRelease(repositoryIdProvider, release);
-}
-
-
-if (JavaVersion.current().isJava8Compatible()) {
-	tasks.withType(Javadoc) {
-		options.addStringOption('Xdoclint:none', '-quiet')
-	}
 }

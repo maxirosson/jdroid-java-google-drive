@@ -1,3 +1,0 @@
-**Implemented enhancements:**
-
-- Changed name to jdroid-java-google-drive [\#1](https://github.com/maxirosson/jdroid-java-google-drive/issues/1)
