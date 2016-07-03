@@ -1,6 +1,6 @@
 ext.VERSION_MAJOR = 0
 ext.VERSION_MINOR = 9
-ext.VERSION_PATCH = 2
+ext.VERSION_PATCH = 3
 
 ext.JDROID_GITHUB_REPOSITORY_OWNER = 'maxirosson'
 ext.JDROID_GITHUB_REPOSITORY_NAME = 'jdroid-java-google-drive'
