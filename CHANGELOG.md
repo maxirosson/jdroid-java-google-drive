@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.9.2](https://github.com/maxirosson/jdroid-java-google-drive/tree/v0.9.2) (2016-07-03)
+[Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v0.9.1...v0.9.2)
+
+**Implemented enhancements:**
+
+- Migrate to jdroid-internal release process [\#2](https://github.com/maxirosson/jdroid-java-google-drive/issues/2)
+
 ## [v0.9.1](https://github.com/maxirosson/jdroid-java-google-drive/tree/v0.9.1) (2016-06-26)
 [Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v0.9.0...v0.9.1)
 
