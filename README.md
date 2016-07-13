@@ -9,7 +9,7 @@
 
 ## Setup 
 
-Add the following configuration to your `build.gradle`:
+Add the following configuration to your `build.gradle`, replacing X.Y.Z by the [latest version](https://github.com/maxirosson/jdroid-java-google-drive/releases/latest)
 
     repositories {
       mavenCentral()
@@ -18,8 +18,6 @@ Add the following configuration to your `build.gradle`:
     dependencies {
       classpath 'com.jdroidframework:jdroid-java-google-drive:X.Y.Z'
     }
-
-Replace the X.Y.Z by the [latest version](https://github.com/maxirosson/jdroid-java-github/releases/latest)
 
 ## Donations
 Help us to continue with this project:
