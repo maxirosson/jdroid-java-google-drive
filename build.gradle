@@ -1,6 +1,6 @@
 ext.VERSION_MAJOR = 0
 ext.VERSION_MINOR = 9
-ext.VERSION_PATCH = 3
+ext.VERSION_PATCH = 4
 
 ext.JDROID_GITHUB_REPOSITORY_OWNER = 'maxirosson'
 ext.JDROID_GITHUB_REPOSITORY_NAME = 'jdroid-java-google-drive'
@@ -25,7 +25,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'com.jdroidframework:jdroid-gradle-plugin:0.9.6-SNAPSHOT'
+		classpath 'com.jdroidframework:jdroid-gradle-plugin:0.10.1'
 		classpath 'com.jdroidframework:jdroid-component-builder:0.1.0'
 	}
 }
@@ -41,5 +41,5 @@ dependencies {
 	compile 'com.google.api-client:google-api-client:1.20.0'
 	compile 'com.google.oauth-client:google-oauth-client-jetty:1.20.0'
 	compile 'com.google.apis:google-api-services-drive:v2-rev170-1.20.0'
-	compile 'com.jdroidframework:jdroid-java:0.9.0'
+	compile 'com.jdroidframework:jdroid-java:0.10.1'
 }
