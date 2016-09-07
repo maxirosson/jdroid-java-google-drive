@@ -41,6 +41,6 @@ repositories {
 dependencies {
 	compile 'com.google.api-client:google-api-client:1.22.0'
 	compile 'com.google.oauth-client:google-oauth-client-jetty:1.22.0'
-	compile 'com.google.apis:google-api-services-drive:v3-rev40-1.22.0'
+	compile 'com.google.apis:google-api-services-drive:v2-rev235-1.22.0'
 	compile 'com.jdroidframework:jdroid-java:0.10.1'
 }
