@@ -3,6 +3,10 @@
 ## [v0.9.4](https://github.com/maxirosson/jdroid-java-google-drive/tree/v0.9.4) (2016-09-07)
 [Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v0.9.2...v0.9.4)
 
+**Implemented enhancements:**
+
+- Upgraded Google APIs dependencies [\#3](https://github.com/maxirosson/jdroid-java-google-drive/issues/3)
+
 ## [v0.9.2](https://github.com/maxirosson/jdroid-java-google-drive/tree/v0.9.2) (2016-07-03)
 [Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v0.9.1...v0.9.2)
 
