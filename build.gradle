@@ -13,20 +13,15 @@ apply plugin: 'com.jdroid.component.builder'
 
 buildscript {
 	repositories {
-		mavenCentral()
 		jcenter()
-		maven {
-			url "https://oss.sonatype.org/content/repositories/snapshots/"
-		}
+		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 		String localMavenRepo = project.hasProperty('LOCAL_MAVEN_REPO') ? project.ext.get('LOCAL_MAVEN_REPO') : System.getenv('LOCAL_MAVEN_REPO')
 		if (localMavenRepo != null) {
-			maven {
-				url localMavenRepo
-			}
+			maven { url localMavenRepo }
 		}
 	}
 	dependencies {
-		classpath 'com.jdroidframework:jdroid-gradle-plugin:0.10.1'
+		classpath 'com.jdroidframework:jdroid-gradle-java-plugin:0.15.0'
 		classpath 'com.jdroidframework:jdroid-component-builder:0.3.0-SNAPSHOT'
 	}
 }
@@ -41,6 +36,6 @@ repositories {
 dependencies {
 	compile 'com.google.api-client:google-api-client:1.22.0'
 	compile 'com.google.oauth-client:google-oauth-client-jetty:1.22.0'
-	compile 'com.google.apis:google-api-services-drive:v2-rev235-1.22.0'
-	compile 'com.jdroidframework:jdroid-java:0.10.1'
+	compile 'com.google.apis:google-api-services-drive:v2-rev270-1.22.0'
+	compile 'com.jdroidframework:jdroid-java-core:0.13.0'
 }
