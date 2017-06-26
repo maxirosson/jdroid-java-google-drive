@@ -8,6 +8,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.json.JsonFactory;
@@ -183,6 +185,11 @@ public class GoogleDriveHelper {
 		return result;
 	}
 
+	public File locateFile(String title, String mimeType, List<String> targetPaths) throws IOException {
+		File parent = locateParent(targetPaths);
+		return locateFile(title, mimeType, parent.getId());
+	}
+	
 	public File locateFile(String title, String mimeType, String parentId) throws IOException {
 		StringBuilder query = new StringBuilder();
 		query.append("(title='");
@@ -195,6 +202,26 @@ public class GoogleDriveHelper {
 
 		FileList fileList = drive.files().list().setQ(query.toString()).execute();
 		return (fileList != null && fileList.getItems() != null && !fileList.getItems().isEmpty()) ? fileList.getItems().get(0) : null;
+	}
+	
+	public InputStream downloadFile(String title, String mimeType, List<String> targetPaths) throws IOException {
+		return downloadFile(locateFile(title, mimeType, targetPaths));
+	}
+	
+	/**
+	 * Download a file's content.
+	 *
+	 * @param file Drive File instance.
+	 * @return InputStream containing the file's content if successful, {@code null} otherwise.
+	 */
+	public InputStream downloadFile(File file) throws IOException {
+		if (file != null && file.getDownloadUrl() != null && file.getDownloadUrl().length() > 0) {
+			HttpResponse resp = getDriveService().getRequestFactory().buildGetRequest(new GenericUrl(file.getDownloadUrl())).execute();
+			return resp.getContent();
+		} else {
+			// The file doesn't have any content stored on Drive.
+			return null;
+		}
 	}
 
 	public File locateParent(List<String> paths) throws IOException {
