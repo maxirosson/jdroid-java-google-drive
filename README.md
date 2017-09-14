@@ -12,11 +12,11 @@
 Add the following configuration to your `build.gradle`, replacing X.Y.Z by the [latest version](https://github.com/maxirosson/jdroid-java-google-drive/releases/latest)
 
     repositories {
-      mavenCentral()
+      jcenter()
     }
   
     dependencies {
-      classpath 'com.jdroidframework:jdroid-java-google-drive:X.Y.Z'
+      compile 'com.jdroidframework:jdroid-java-google-drive:X.Y.Z'
     }
 
 ## Donations
