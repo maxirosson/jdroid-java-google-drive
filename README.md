@@ -16,7 +16,7 @@ Add the following configuration to your `build.gradle`, replacing X.Y.Z by the [
     }
   
     dependencies {
-      compile 'com.jdroidframework:jdroid-java-google-drive:X.Y.Z'
+      implementation 'com.jdroidframework:jdroid-java-google-drive:X.Y.Z'
     }
 
 ## Donations
