@@ -2,6 +2,7 @@ package com.jdroid.java.google.sheets;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.sheets.v4.Sheets;
+import com.google.api.services.sheets.v4.model.ValueRange;
 import com.jdroid.java.exception.UnexpectedException;
 import com.jdroid.java.google.AbstractConnector;
 
@@ -32,6 +33,14 @@ public class GoogleSheetsConnector extends AbstractConnector {
 		Sheets.Builder builder = new Sheets.Builder(getHttpTransport(), getJsonFactory(), credential);
 		builder.setApplicationName(getApplicationName());
 		return builder.build();
+	}
+	
+	public ValueRange getValues(String spreadsheetId, String range) {
+		try {
+			return sheets.spreadsheets().values().get(spreadsheetId, range).execute();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public Sheets getSheets() {
