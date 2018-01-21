@@ -1,6 +1,5 @@
 version = '0.11.0'
 
-ext.JDROID_GITHUB_REPOSITORY_OWNER = 'maxirosson'
 ext.JDROID_GITHUB_REPOSITORY_NAME = 'jdroid-java-google-drive'
 
 ext.PROJECT_NAME = 'Jdroid Java Connector for Google Drive API'
@@ -12,6 +11,7 @@ apply plugin: 'com.jdroid.component.builder'
 buildscript {
 	repositories {
 		jcenter()
+		maven { url "https://plugins.gradle.org/m2/" }
 		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 		String localMavenRepo = project.hasProperty('LOCAL_MAVEN_REPO') ? project.ext.get('LOCAL_MAVEN_REPO') : System.getenv('LOCAL_MAVEN_REPO')
 		if (localMavenRepo != null) {
@@ -19,9 +19,11 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'com.jdroidframework:jdroid-gradle-java-plugin:0.16.0'
-		classpath 'com.jdroidframework:jdroid-component-builder:0.3.0-SNAPSHOT'
-	}
+		// https://github.com/maxirosson/jdroid-gradle-plugin/blob/master/CHANGELOG.md
+		classpath 'com.jdroidframework:jdroid-gradle-java-plugin:0.18.0'
+
+		// https://github.com/maxirosson/jdroid-component-builder/blob/master/CHANGELOG.md
+		classpath 'com.jdroidframework:jdroid-component-builder:0.4.0'	}
 }
 
 repositories {
