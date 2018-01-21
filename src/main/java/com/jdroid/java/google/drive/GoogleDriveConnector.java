@@ -1,26 +1,18 @@
 package com.jdroid.java.google.drive;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 import com.google.common.collect.Lists;
 import com.jdroid.java.exception.UnexpectedException;
+import com.jdroid.java.google.AbstractConnector;
 import com.jdroid.java.utils.LoggerUtils;
 
 import org.slf4j.Logger;
@@ -29,23 +21,14 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoogleDriveConnector {
+public class GoogleDriveConnector extends AbstractConnector {
 	
 	private static final Logger LOGGER = LoggerUtils.getLogger(GoogleDriveConnector.class);
 
 	public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
-
-	private FileDataStoreFactory dataStoreFactory;
-	private JsonFactory jsonFactory;
-	private HttpTransport httpTransport;
-
-	// Scopes required by this quickstart.
-	private List<String> scopes;
 
 	private class CustomProgressListener implements MediaHttpUploaderProgressListener {
 
@@ -66,20 +49,13 @@ public class GoogleDriveConnector {
 		}
 	}
 
-	private String applicationName;
 	private Drive drive;
-	private String userCredentialsDirPath;
 
-	public GoogleDriveConnector(List<String> scopes, String userCredentialsDirPath) {
+	public GoogleDriveConnector(String applicationName, List<String> scopes, String userCredentialsDirPath) {
+		super(applicationName, scopes, userCredentialsDirPath);
 		try {
-			jsonFactory = JacksonFactory.getDefaultInstance();
-			httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-			dataStoreFactory = new FileDataStoreFactory(new java.io.File(userCredentialsDirPath));
-			
-			this.scopes = scopes;
-			this.userCredentialsDirPath = userCredentialsDirPath;
 			drive = getDriveService();
-		} catch (GeneralSecurityException | IOException e) {
+		} catch (IOException e) {
 			throw new UnexpectedException(e);
 		}
 	}
@@ -90,31 +66,11 @@ public class GoogleDriveConnector {
 	 * @return an authorized Drive client service
 	 * @throws IOException
 	 */
-	private Drive getDriveService() throws IOException {
+	protected Drive getDriveService() throws IOException {
 		Credential credential = authorize();
-		Drive.Builder builder = new Drive.Builder(httpTransport, jsonFactory, credential);
-		builder.setApplicationName(applicationName);
+		Drive.Builder builder = new Drive.Builder(getHttpTransport(), getJsonFactory(), credential);
+		builder.setApplicationName(getApplicationName());
 		return builder.build();
-	}
-
-	/**
-	 * Creates an authorized Credential object.
-	 *
-	 * @return an authorized Credential object.
-	 * @throws IOException
-	 */
-	private Credential authorize() throws IOException {
-		// Load client secrets.
-		InputStream in = new FileInputStream(userCredentialsDirPath + "/client_secret.json");
-		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
-
-		// Build flow and trigger user authorization request.
-		GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(
-				httpTransport, jsonFactory, clientSecrets, scopes);
-		builder.setDataStoreFactory(dataStoreFactory);
-		builder.setAccessType("offline");
-		GoogleAuthorizationCodeFlow flow = builder.build();
-		return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 	}
 
 	public void createFolders(List<String> folders) throws IOException {
@@ -262,8 +218,8 @@ public class GoogleDriveConnector {
 		}
 		return result;
 	}
-
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
+	
+	public Drive getDrive() {
+		return drive;
 	}
 }
