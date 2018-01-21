@@ -19,7 +19,11 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
+import com.google.common.collect.Lists;
 import com.jdroid.java.exception.UnexpectedException;
+import com.jdroid.java.utils.LoggerUtils;
+
+import org.slf4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -28,10 +32,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class GoogleDriveHelper {
+public class GoogleDriveConnector {
+	
+	private static final Logger LOGGER = LoggerUtils.getLogger(GoogleDriveConnector.class);
 
 	public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 
@@ -47,16 +52,16 @@ public class GoogleDriveHelper {
 		public void progressChanged(MediaHttpUploader uploader) throws IOException {
 			switch (uploader.getUploadState()) {
 				case INITIATION_STARTED:
-					System.out.println("File upload initiation has started!");
+					LOGGER.info("File upload initiation has started!");
 					break;
 				case INITIATION_COMPLETE:
-					System.out.println("File upload initiation is complete!");
+					LOGGER.info("File upload initiation is complete!");
 					break;
 				case MEDIA_IN_PROGRESS:
-					System.out.println("File upload progress: " + uploader.getProgress());
+					LOGGER.info("File upload progress: " + uploader.getProgress());
 					break;
 				case MEDIA_COMPLETE:
-					System.out.println("Upload is complete!");
+					LOGGER.info("Upload is complete!");
 			}
 		}
 	}
@@ -65,19 +70,18 @@ public class GoogleDriveHelper {
 	private Drive drive;
 	private String userCredentialsDirPath;
 
-	public GoogleDriveHelper(List<String> scopes, String userCredentialsDirPath) throws IOException {
-
-		jsonFactory = JacksonFactory.getDefaultInstance();
+	public GoogleDriveConnector(List<String> scopes, String userCredentialsDirPath) {
 		try {
+			jsonFactory = JacksonFactory.getDefaultInstance();
 			httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-		} catch (GeneralSecurityException e) {
+			dataStoreFactory = new FileDataStoreFactory(new java.io.File(userCredentialsDirPath));
+			
+			this.scopes = scopes;
+			this.userCredentialsDirPath = userCredentialsDirPath;
+			drive = getDriveService();
+		} catch (GeneralSecurityException | IOException e) {
 			throw new UnexpectedException(e);
 		}
-		dataStoreFactory = new FileDataStoreFactory(new java.io.File(userCredentialsDirPath));
-
-		this.scopes = scopes;
-		this.userCredentialsDirPath = userCredentialsDirPath;
-		drive = getDriveService();
 	}
 
 	/**
@@ -129,7 +133,7 @@ public class GoogleDriveHelper {
 			metaData.setMimeType(FOLDER_MIME_TYPE);
 
 			if (parentId != null) {
-				metaData.setParents(Arrays.asList(new ParentReference().setId(parentId)));
+				metaData.setParents(Lists.newArrayList(new ParentReference().setId(parentId)));
 			}
 
 			folder = drive.files().insert(metaData).execute();
@@ -145,7 +149,7 @@ public class GoogleDriveHelper {
 	public void uploadFile(String mimeType, String sourcePath, File parent) throws IOException {
 
 		java.io.File contentFile = new java.io.File(sourcePath);
-		File fileToRemove = locateFile(contentFile.getName(), mimeType, parent.getId());
+		File fileToRemove = locateFile(contentFile.getName(), mimeType, parent != null ? parent.getId() : null);
 		if (fileToRemove != null) {
 			drive.files().delete(fileToRemove.getId()).execute();
 		}
@@ -158,7 +162,7 @@ public class GoogleDriveHelper {
 		metaData.setMimeType(mimeType);
 
 		if (parent != null) {
-			metaData.setParents(Arrays.asList(new ParentReference().setId(parent.getId())));
+			metaData.setParents(Lists.newArrayList(new ParentReference().setId(parent.getId())));
 		}
 
 		Drive.Files.Insert request = drive.files().insert(metaData, mediaContent);
@@ -176,7 +180,7 @@ public class GoogleDriveHelper {
 				result.addAll(files.getItems());
 				request.setPageToken(files.getNextPageToken());
 			} catch (IOException e) {
-				System.out.println("An error occurred: " + e);
+				LOGGER.error("An error occurred: " + e);
 				request.setPageToken(null);
 			}
 		} while (request.getPageToken() != null &&
@@ -197,8 +201,10 @@ public class GoogleDriveHelper {
 		query.append("') and (mimeType = '");
 		query.append(mimeType);
 		query.append("') and (not trashed) and ('");
-		query.append(parentId);
-		query.append("' in parents)");
+		if (parentId != null) {
+			query.append(parentId);
+			query.append("' in parents)");
+		}
 
 		FileList fileList = drive.files().list().setQ(query.toString()).execute();
 		return (fileList != null && fileList.getItems() != null && !fileList.getItems().isEmpty()) ? fileList.getItems().get(0) : null;
