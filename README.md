@@ -1,11 +1,11 @@
 # Java Connector for Google Drive
 
 ## Continuous Integration
-|Branch|Status|
-| ------------- | ------------- |
-|Master|[![Build Status](https://travis-ci.org/maxirosson/jdroid-java-google-drive.svg?branch=master)](https://travis-ci.org/maxirosson/jdroid-java-google-drive)|
-|Staging|[![Build Status](https://api.travis-ci.org/maxirosson/jdroid-java-google-drive.svg?branch=staging)](https://travis-ci.org/maxirosson/jdroid-java-google-drive)|
-|Production|[![Build Status](https://api.travis-ci.org/maxirosson/jdroid-java-google-drive.svg?branch=production)](https://travis-ci.org/maxirosson/jdroid-java-google-drive)|
+|Branch|Status|Workflows|Insights|
+| ------------- | ------------- | ------------- | ------------- |
+|master|[![CircleCI](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/master.svg?style=svg)](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/master)|[Workflows](https://circleci.com/gh/maxirosson/workflows/jdroid-java-google-drive/tree/master)|[Insights](https://circleci.com/build-insights/gh/maxirosson/jdroid-java-google-drive/master)|
+|staging|[![CircleCI](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/staging.svg?style=svg)](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/staging)|[Workflows](https://circleci.com/gh/maxirosson/workflows/jdroid-java-google-drive/tree/staging)|[Insights](https://circleci.com/build-insights/gh/maxirosson/jdroid-java-google-drive/staging)|
+|production|[![CircleCI](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/production.svg?style=svg)](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/production)|[Workflows](https://circleci.com/gh/maxirosson/workflows/jdroid-java-google-drive/tree/production)|[Insights](https://circleci.com/build-insights/gh/maxirosson/jdroid-java-google-drive/production)|
 
 ## Setup 
 
@@ -23,5 +23,3 @@ Add the following configuration to your `build.gradle`, replacing X.Y.Z by the [
 Help us to continue with this project:
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2UEBTRTSCYA9L)
-
-<a href='https://pledgie.com/campaigns/30030'><img alt='Click here to lend your support to: Jdroid and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/30030.png?skin_name=chrome' border='0' ></a>
