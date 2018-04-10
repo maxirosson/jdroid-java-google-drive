@@ -20,10 +20,10 @@ buildscript {
 	}
 	dependencies {
 		// https://github.com/maxirosson/jdroid-gradle-plugin/blob/master/CHANGELOG.md
-		classpath 'com.jdroidframework:jdroid-gradle-java-plugin:0.18.0'
+		classpath 'com.jdroidtools:jdroid-gradle-java-plugin:1.0.0'
 
 		// https://github.com/maxirosson/jdroid-component-builder/blob/master/CHANGELOG.md
-		classpath 'com.jdroidframework:jdroid-component-builder:0.4.0'	}
+		classpath 'com.jdroidtools:jdroid-component-builder:1.0.0'	}
 }
 
 repositories {
@@ -43,5 +43,5 @@ dependencies {
 	compile 'com.google.apis:google-api-services-sheets:v4-rev499-1.23.0'
 
 	// https://github.com/maxirosson/jdroid-java/blob/master/CHANGELOG.md
-	compile 'com.jdroidframework:jdroid-java-core:0.15.0'
+	compile 'com.jdroidtools:jdroid-java-core:1.0.0'
 }
