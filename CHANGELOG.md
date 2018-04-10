@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0](https://github.com/maxirosson/jdroid-java-google-drive/tree/v1.0.0) (2018-04-10)
+[Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v0.10.0...v1.0.0)
+
+**Implemented enhancements:**
+
+- Add Google Sheets Api v4 support [\#5](https://github.com/maxirosson/jdroid-java-google-drive/issues/5)
+
 ## [v0.10.0](https://github.com/maxirosson/jdroid-java-google-drive/tree/v0.10.0) (2017-06-26)
 [Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v0.9.4...v0.10.0)
 
