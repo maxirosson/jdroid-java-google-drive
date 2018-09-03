@@ -4,7 +4,6 @@
 |Branch|Status|Workflows|Insights|
 | ------------- | ------------- | ------------- | ------------- |
 |master|[![CircleCI](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/master.svg?style=svg)](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/master)|[Workflows](https://circleci.com/gh/maxirosson/workflows/jdroid-java-google-drive/tree/master)|[Insights](https://circleci.com/build-insights/gh/maxirosson/jdroid-java-google-drive/master)|
-|staging|[![CircleCI](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/staging.svg?style=svg)](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/staging)|[Workflows](https://circleci.com/gh/maxirosson/workflows/jdroid-java-google-drive/tree/staging)|[Insights](https://circleci.com/build-insights/gh/maxirosson/jdroid-java-google-drive/staging)|
 |production|[![CircleCI](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/production.svg?style=svg)](https://circleci.com/gh/maxirosson/jdroid-java-google-drive/tree/production)|[Workflows](https://circleci.com/gh/maxirosson/workflows/jdroid-java-google-drive/tree/production)|[Insights](https://circleci.com/build-insights/gh/maxirosson/jdroid-java-google-drive/production)|
 
 ## Setup 
