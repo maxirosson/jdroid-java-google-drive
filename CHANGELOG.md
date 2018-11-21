@@ -1,5 +1,12 @@
 # Change Log
 
+## [v2.0.0](https://github.com/maxirosson/jdroid-java-google-drive/tree/v2.0.0) (2018-11-21)
+[Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v1.0.0...v2.0.0)
+
+**Implemented enhancements:**
+
+- Changed credentials file name to credentials.json [\#6](https://github.com/maxirosson/jdroid-java-google-drive/issues/6)
+
 ## [v1.0.0](https://github.com/maxirosson/jdroid-java-google-drive/tree/v1.0.0) (2018-04-10)
 [Full Changelog](https://github.com/maxirosson/jdroid-java-google-drive/compare/v0.10.0...v1.0.0)
 
