@@ -1,4 +1,4 @@
-version = '1.1.0'
+version = '2.0.0'
 
 ext.JDROID_GITHUB_REPOSITORY_NAME = 'jdroid-java-google-drive'
 
@@ -17,13 +17,18 @@ buildscript {
 		if (localMavenRepo != null) {
 			maven { url localMavenRepo }
 		}
+		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	}
 	dependencies {
 		// https://github.com/maxirosson/jdroid-gradle-plugin/blob/master/CHANGELOG.md
-		classpath 'com.jdroidtools:jdroid-gradle-java-plugin:1.0.0'
+		classpath 'com.jdroidtools:jdroid-gradle-java-plugin:1.1.0'
 
 		// https://github.com/maxirosson/jdroid-component-builder/blob/master/CHANGELOG.md
-		classpath 'com.jdroidtools:jdroid-component-builder:1.0.2'	}
+		classpath 'com.jdroidtools:jdroid-gradle-root-plugin:1.1.0'
+
+		// https://github.com/maxirosson/jdroid-component-builder/blob/master/CHANGELOG.md
+		classpath 'com.jdroidtools:jdroid-component-builder:1.1.0-SNAPSHOT'
+	}
 }
 
 repositories {
@@ -40,8 +45,8 @@ dependencies {
 	compile 'com.google.apis:google-api-services-drive:v2-rev270-1.22.0'
 
 	// Google Sheets API v4
-	compile 'com.google.apis:google-api-services-sheets:v4-rev499-1.23.0'
+	compile 'com.google.apis:google-api-services-sheets:v4-rev20180727-1.27.0'
 
 	// https://github.com/maxirosson/jdroid-java/blob/master/CHANGELOG.md
-	compile 'com.jdroidtools:jdroid-java-core:1.0.0'
+	compile 'com.jdroidtools:jdroid-java-core:2.0.0'
 }

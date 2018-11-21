@@ -23,7 +23,8 @@ public abstract class AbstractConnector {
 	
 	private String applicationName;
 	private String userCredentialsDirPath;
-	
+	private String userCredentialsFileName = "credentials.json";
+
 	private FileDataStoreFactory dataStoreFactory;
 	private JsonFactory jsonFactory;
 	private HttpTransport httpTransport;
@@ -50,7 +51,7 @@ public abstract class AbstractConnector {
 	 */
 	protected Credential authorize() throws IOException {
 		// Load client secrets.
-		InputStream in = new FileInputStream(userCredentialsDirPath + "/client_secret.json");
+		InputStream in = new FileInputStream(userCredentialsDirPath + "/" + userCredentialsFileName);
 		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
 		
 		// Build flow and trigger user authorization request.
@@ -72,5 +73,9 @@ public abstract class AbstractConnector {
 	
 	public String getApplicationName() {
 		return applicationName;
+	}
+
+	public void setUserCredentialsFileName(String userCredentialsFileName) {
+		this.userCredentialsFileName = userCredentialsFileName;
 	}
 }
