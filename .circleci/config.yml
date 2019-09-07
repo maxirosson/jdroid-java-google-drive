@@ -67,7 +67,7 @@ jobs:
           path: ./build/reports/tests/test
           destination: tests
 
-  deploy:
+  publish:
     <<: *defaults
     steps:
       - checkout
@@ -87,6 +87,10 @@ workflows:
       - verify:
           requires:
             - build
-      - deploy:
+      - publish:
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - verify
